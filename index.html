@@ -1,396 +1,214 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login / Register</title>
+    <style>
+        body { font-family: sans-serif; display: grid; place-items: center; height: 100vh; background: #f0f2f5; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px; }
+        input { width: 100%; padding: 8px; margin: 6px 0 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .switch { text-align: center; margin-top: 1rem; font-size: 14px; color: #007bff; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2 id="form-title">Login</h2>
+    <form id="auth-form" onsubmit="handleSubmit(event)">
+        <div id="name-group" style="display: none;">
+            <label>Name</label>
+            <input type="text" id="name">
+        </div>
+        <label>Password</label>
+        <input type="password" id="password" required>
+        <button type="submit" id="submit-btn">Login</button>
+    </form>
+    <div class="switch" onclick="toggleMode()">Don't have an account? Register</div>
+</div>
+
+<script>
+    let isLogin = true;
+
+    function toggleMode() {
+        isLogin = !isLogin;
+        document.getElementById('form-title').innerText = isLogin ? 'Login' : 'Register';
+        document.getElementById('submit-btn').innerText = isLogin ? 'Login' : 'Register';
+        document.getElementById('name-group').style.display = isLogin ? 'none' : 'block';
+        document.querySelector('.switch').innerText = isLogin ? "Don't have an account? Register" : "Already have an account? Login";
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        let nameInput = document.getElementById('name').value;
+        
+        if (!isLogin && nameInput) {
+            localStorage.setItem("navName", JSON.stringify(nameInput));
+        } else {
+            localStorage.setItem("navName", JSON.stringify("User"));
+        }
+
+        // Successfully login/register ke baad dashboard par bhej do
+        window.location.href = "dashboard.html";
+    }
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinTrack Pro - Personal Finance Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>Login / Register</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: grid;
+            place-items: center;
+            height: 100vh;
+            background: #f0f2f5;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0 16px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 14px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .switch:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
-  <!-- <div class="overlay"></div> -->
-  <div id="box">
 
-    <!-- HOME DASHBOARD PAGE  -->
+    <div class="card">
+        <h2 id="form-title">Login</h2>
+        <form id="auth-form" onsubmit="handleSubmit(event)">
 
-    <div id="dashboardPage">
-      <aside>
-        <div class="logo">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCBvzw53HT4gmcBGwoHPXoUIT1nkDiNnYFxfMra9paQ&s=10"
-            alt="" />
-          <div class="navheading">
-            <h3>FinTrack Pro</h3>
-            <p>Enterprice Finance</p>
-          </div>
-        </div>
-
-        <div id="asidebox">
-          <div class="buttons">
-            <button id="dashboardBtn" onclick="showDashboard()">
-              <img src="https://icons.veryicon.com/png/o/miscellaneous/decon/dashboard-76.png" alt="" />
-              Dashboard
-            </button>
-            <button id="settingBtn" onclick="showSetting()">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBNB01Ncj8BdQiLNwes-M9xYhPMRiwu634VxA7lA_s4A&s=10"
-                alt="" />
-              Setting
-            </button>
-          </div>
-
-          <footer>
-            <button id="AddTransaction"> + Add Transaction</button>
-          </footer>
-
-          <div class="form">
-            <form>
-              <div class="top">
-                <h3>Add Transaction</h3>
-                <p id="cross"> x </p>
-              </div>
-              <div class="middle">
-                <p>Type</p>
-                <select name="" id="spentarea" defaultvalue="Expense">
-                  <option value="Expense">Expense</option>
-                  <option value="Income">Income</option>
-                </select>
-                <p>Description</p>
-                <input placeholder="eg. salary Amazon Shopping" type="text" id="description" />
-                <div class="Amountinfo">
-                  <div class="amount">
-                    <p>Amount</p>
-                    <input type="number" id="amoutinput" />
-                  </div>
-                  <div class="date">
-                    <p>Date</p>
-                    <span id="date"></span>
-                    <input id="dateinput" type="date" />
-                  </div>
-                </div>
-
-                <p>Category</p>
-                <div class="category">
-                  <select name="categories" id="category">
-                    <option value="selctcategory"> Select a Category </option>
-                    <option value="Food & Dining"> Food & Dining </option>
-                    <option value="Shopping"> Shopping </option>
-                    <option value="Petrol & Auto"> Petrol & Auto </option>
-                    <option value="Recharge & Bills"> Recharge & Bills </option>
-                    <option value="Utilities"> Utilities </option>
-                    <option value="Salary"> Salary </option>
-                    <option value="Entertainment"> Entertainment </option>
-                    <option value="Other"> Other </option>
-                  </select>
-                </div>
-
-                <button> Save Transaction </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </aside>
-
-      <div class="herosection">
-        <nav>
-          <div>|</div>
-          <h4 id="navName"> </h4>
-          <button>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfDsVsksDsxDTYjN1B7n1HisVTOZWPHie4UY_HrJ6MKw&s=10"
-              alt="" />
-            Logout
-          </button>
-        </nav>
-        <hr />
-
-        <main>
-          <div class="financebox">
-            <h2>Financial Overview</h2>
-            <p>Real-time tracking application</p>
-          </div>
-
-          <div class="cards">
-            <div class="card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgPIoxfrdXHKEUZiv7cajQhMYKpETVYIrkz0V2d6ppEA&s=10"
-                alt="" />
-              <p> Current Balance </p>
-              <h2 id="CurrentBalance">$ </h2>
+            <div id="name-group" style="display: none;">
+                <label>Name</label>
+                <input type="text" id="name">
             </div>
 
-            <div class="card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi6X9xNDCs1HVwJJ9hWitiQ-8Pqfi6Ef7roygBQeg0Qw&s=10"
-                alt="" />
-              <p > Total Income </p>
-              <h2 id="TotalIncome" style="color: rgba(0, 128, 0, 0.905)">$ </h2>
-            </div>
+            <label>Password</label>
+            <input type="password" id="password" required>
 
-            <div class="card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTTEMO5Dk5nBzwZANTZ3eLNtKl1FIiPdg1IxnOqvOflIA&s=10"
-                alt="" />
-              <p> Total Expences </p>
-              <h2 id="TotalExpences" style="color: rgba(255, 0, 0, 0.618)">
-                $
-              </h2>
-            </div>
+            <button type="submit" id="submit-btn">Login</button>
+        </form>
 
-            <div class="card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvygZSquSQ4UU0kG8Cm6IMYE4tgCzMy_FhAwd0ufBTpA&s=10"
-                alt="" />
-              <p> Total Transactions </p>
-              <h2 id="TotalTransaction">0</h2>
-            </div>
-          </div>
-
-          <div class="chart">
-            <div class="cashflow">
-              <h2>Cash Flow Analysis</h2>
-              <div class="canvas">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-
-            <div class="theme">
-              <h2>Prefrence</h2>
-              <div class="themesection">
-                <p>Dark Mode</p>
-                <span>
-                  <input type="checkbox" name="checkbox" id="toggle" />
-                  <label for="toggle" class="switch"></label>
-                </span>
-              </div>
-              <hr />
-              <div class="delbtn">
-                <img
-                  src="https://imgs.search.brave.com/YhdWqf2tqbhZogQRiZ-j_L11G17qSTFEsX2Vkt1IT0c/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9pbWcu/aWNvbnM4LmNvbS9w/bGFzdGljaW5lLzEy/MDAvZmlsbGVkLXRy/YXNoLmpwZw"
-                  alt="" />
-                <button id="rstbtn">Reset All Data</button>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="expanses">
-            <h2>All Transaction</h2>
-
-            <div class="transactionInfo">
-              <div class="searchbar" placeholder="">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9xHKbO_s_-Y9L-vmwjkJtjBoV746mko5v0JoX0UrW_A&s=10"
-                  alt="" />
-                <input type="text" placeholder="Search Transaction...." />
-              </div>
-
-              <div class="types">
-                <select name="" id="">
-                  <option value="">All Types</option>
-                  <option value="">Income Only</option>
-                  <option value="">Expense Only</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="table">
-              <p>DATE</p>
-              <p>DESCRIPTION</p>
-              <p>CATEGORY</p>
-              <p>AMOUNT</p>
-              <p>ACTIONS</p>
-            </div>
-            <hr />
-
-
-            <div id="tabledata">
-            </div>
-
-          </div>
-        </main>
-      </div>
-
+        <div class="switch" onclick="toggleMode()">Don't have an account? Register</div>
     </div>
 
+    <script>
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let navName;
+        let isLogin = true;
 
+        function toggleMode() {
+            isLogin = !isLogin;
+            document.getElementById('form-title').innerText = isLogin ? 'Login' : 'Register';
+            document.getElementById('submit-btn').innerText = isLogin ? 'Login' : 'Register';
+            document.getElementById('name-group').style.display = isLogin ? 'none' : 'block';
+            document.querySelector('.switch').innerText = isLogin ? "Don't have an account? Register" : "Already have an account? Login";
+        }
 
+        function handleSubmit(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
 
+            let validuser;
 
+            console.log(users);
+            users.forEach((val) => {
+                if (isLogin) {
+                    console.log("Logging in with password:", password);
+                    if (password === val.password) {
+                        navName = localStorage.setItem("navName",JSON.stringify(val.username));
+                        console.log(navName)
+                        alert('correct password');
+                        window.location.href = 'index.html'
+                    } else {
+                        alert("Wrong Password OR you are not registered.")
+                    }
+                } else {
+                    console.log("Registering user:", name, "with password:", password);
+                    let newuser = {
+                        username: name,
+                        password: password
+                    }
+                    console.log(newuser)
+                    users.push(newuser);
+                    localStorage.setItem("users", JSON.stringify(users));
+                    window.localStorage.href = 'index.html'
+                }
+            })
 
-    // SETTING PAGE
+        }
+    </script>
 
-    <div id="settingPage">
-      <aside>
-        <div class="logo">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJCBvzw53HT4gmcBGwoHPXoUIT1nkDiNnYFxfMra9paQ&s=10"
-            alt="" />
-          <div class="navheading">
-            <h3>FinTrack Pro</h3>
-            <p>Enterprice Finance</p>
-          </div>
-        </div>
-
-        <div id="asidebox">
-          <div class="buttons">
-            <button id="setdashboardBtn" onclick="showDashboard()">
-              <img src="https://icons.veryicon.com/png/o/miscellaneous/decon/dashboard-76.png" alt="" />
-              Dashboard
-            </button>
-            <button id="setsettingBtn" onclick='showSetting()'>
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBNB01Ncj8BdQiLNwes-M9xYhPMRiwu634VxA7lA_s4A&s=10"
-                alt="" />
-              Setting
-            </button>
-          </div>
-
-          <footer>
-            <button id="AddTransaction"> + Add Transaction</button>
-          </footer>
-
-          <!-- <div class="form">
-            <form>
-              <div class="top">
-                <h3>Add Transaction</h3>
-                <p>x</p>
-              </div>
-              <div class="middle">
-                <p>Type</p>
-                <select name="type" id="" defaultvalue="Expense">
-                  <option value="Expense">Expense</option>
-                  <option value="Income">Income</option>
-                </select>
-                <p>Description</p>
-                <input placeholder="eg. salary Amazon Shopping" type="text" id="description" />
-                <div class="Amountinfo">
-                  <div class="amount">
-                    <p>Amount</p>
-                    <input type="text" id="amount" />
-                  </div>
-                  <div class="date">
-                    <p>Date</p>
-                    <input id="date" type="date" />
-                  </div>
-                </div>
-
-                <div class="category">
-                  <p>Category</p>
-                  <select name="" id="">
-                    <option value=""> Select a Category </option>
-                    <option value=""> Food & Dining </option>
-                    <option value=""> Shopping </option>
-                    <option value=""> Petrol & Auto </option>
-                    <option value=""> Recharge & Bills </option>
-                    <option value=""> Utilities </option>
-                    <option value=""> Salary </option>
-                    <option value=""> Entertainment </option>
-                    <option value=""> Other </option>
-                  </select>
-                </div>
-
-                <button class="formsubmitbtn" > Save Transaction </button>
-              </div>
-            </form>
-          </div> -->
-
-        </div>
-      </aside>
-
-      <div class="herosection">
-        <nav>
-          <div>|</div>
-          <h4>Yogesh</h4>
-          <button>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfDsVsksDsxDTYjN1B7n1HisVTOZWPHie4UY_HrJ6MKw&s=10"
-              alt="" />
-            Logout
-          </button>
-        </nav>
-        <hr />
-
-        <main class="mainsetting">
-          <div class="financebox">
-            <h2> Settings </h2>
-            <p> Manage your account profile and app formating. </p>
-          </div>
-
-          <div class="settingcards">
-            <div class="settingcard">
-              <h1> Profile Details </h1>
-
-              <form action="" class="">
-
-                <div id='nameDetail'>
-                  <label for="">Full Name</label>
-                  <input type="text" name="" id="" placeholder="Enter updated Data ">
-                </div>
-
-                <div id='currencyDetail'>
-                  <label for=""> Primary Currency </label>
-                  <select name="" id="">
-                    <option value="">IND ₹</option>
-                    <option value="">USD $</option>
-                    <option value="">EUR €</option>
-                    <option value="">JPY ¥</option>
-                  </select>
-                </div>
-
-                <br> <br>
-
-
-              </form>
-              <button> Save Changes </button>
-
-            </div>
-
-        </main>
-      </div>
-    </div>
-
-
-
-
-
-  </div>
 </body>
 
-<script src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-  const ctx = document.getElementById("myChart");
-
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["income vs expanse"],
-      datasets: [
-        {
-          label: "income",
-          data: [1900],
-          backgroundColor: "darkgreen",
-          borderWidth: 1,
-        },
-        {
-          label: "expanse",
-          data: [300],
-          backgroundColor: "darkred",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-        },
-      },
-    },
-  });
-</script>
-
-</html>
+</html> -->

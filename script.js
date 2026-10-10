@@ -130,6 +130,7 @@ AddTransactionForm.addEventListener("submit", (e) => {
 
   tabledata.innerHTML = "";
   displaydata();
+  loadData();
 });
 
 
